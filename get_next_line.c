@@ -10,7 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+
 char	*get_next_line(int fd)
 {
-	return (0);
+	size_t		buf_size;
+	static char	buf[1024];
+	int			bytes;
+
+	buf_size = 1024;
+	if (fd < 0)
+		return (NULL);
+	bytes = read(fd, buf, buf_size);
+	if (bytes == 0 || bytes == -1)
+		return (NULL);
+	return (buf);
 }

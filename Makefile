@@ -1,23 +1,19 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-NAME = libftgetnextline.a
-SRC = get_next_line.c get_next_line_utils.c
-OBJ = $(SRC:.c=.o)
+OUT = program
+SRC = get_next_line.c get_next_line_utils.c program.c
 
-all: $(NAME)
 
-%.o: %.c
-	$(CC) -c $(FLAGS) $< -o $@
+build:
+	$(CC) $(CFLAGS) $(SRC) -o $(OUT)
 
-$(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+run: build
+	./program
+	clean
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OUT)
 
-fclean: clean
-	rm -f $(NAME)
+re: clean build 
 
-re: fclean all
-
-.PHONY: all clean fclean re run
+.PHONY: build clean run
