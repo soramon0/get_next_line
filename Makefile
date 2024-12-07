@@ -8,11 +8,11 @@ build:
 	$(CC) $(CFLAGS) -D BUFFER_SIZE=$(BUFF_SIZE) $(SRC) -o $(OUT)
 
 run: build
-	./program
-	clean
+	@./program
+	@rm -f $(OUT)
 
 clean:
-	rm -f $(OUT)
+	@rm -f $(OUT)
 
 re: clean build
 
