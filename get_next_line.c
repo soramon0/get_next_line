@@ -14,12 +14,12 @@
 
 char	*get_next_line(int fd)
 {
-	size_t		buf_size;
-	static char	buf[1024];
-	int			bytes;
+	unsigned int	buf_size;
+	static char		buf[1024];
+	int				bytes;
 
-	buf_size = 1024;
-	if (fd < 0)
+	buf_size = BUFFER_SIZE;
+	if (buf_size == 0 || fd < 0)
 		return (NULL);
 	bytes = read(fd, buf, buf_size);
 	if (bytes == 0 || bytes == -1)
