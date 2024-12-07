@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_GETNEXTLINE_H
-# define FT_GETNEXTLINE_H
+#ifndef FT_GET_NEXT_LINE_H
+# define FT_GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 69
-# endif //  BUFFER_SIZE
+# endif
 
 # include <stdlib.h>
 # include <unistd.h>

@@ -17,15 +17,26 @@
 int	main(void)
 {
 	char	*data;
+	int		fd;
 
-	data = get_next_line(0);
-	if (!data)
+	fd = open("Makefile", O_RDONLY);
+	if (fd == -1)
 	{
-		printf("got null");
+		printf("could not open file\n");
+		return (1);
 	}
-	else
+	while (1)
 	{
-		printf("got = %s", data);
+		data = get_next_line(fd);
+		if (!data)
+		{
+			printf("got null\n");
+			break ;
+		}
+		else
+		{
+			printf("%s\n", data);
+		}
 	}
 	return (0);
 }

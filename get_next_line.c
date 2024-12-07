@@ -15,10 +15,10 @@
 char	*get_next_line(int fd)
 {
 	unsigned int	buf_size;
-	static char		buf[1024];
+	static char		buf[20];
 	int				bytes;
 
-	buf_size = BUFFER_SIZE;
+	buf_size = (unsigned int)BUFFER_SIZE;
 	if (buf_size == 0 || fd < 0)
 		return (NULL);
 	bytes = read(fd, buf, buf_size);
