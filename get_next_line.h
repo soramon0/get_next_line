@@ -21,5 +21,6 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
+char	*ft_strdup(const char *src, size_t n);
 
 #endif

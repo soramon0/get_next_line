@@ -12,17 +12,37 @@
 
 #include "get_next_line.h"
 
+static char	*get_line(char *buf, size_t bytes)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < bytes)
+	{
+		if (buf[i] == '\n')
+		{
+			i++;
+			break ;
+		}
+		i++;
+	}
+	return (ft_strdup(buf, i));
+}
+
+static char	*work(int fd)
+{
+	static char	buf[BUFFER_SIZE];
+	static int	bytes;
+
+	bytes += read(fd, buf, BUFFER_SIZE);
+	if (!bytes)
+		return (NULL);
+	return (get_line(buf, bytes));
+}
+
 char	*get_next_line(int fd)
 {
-	unsigned int	buf_size;
-	static char		buf[20];
-	int				bytes;
-
-	buf_size = (unsigned int)BUFFER_SIZE;
-	if (buf_size == 0 || fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	bytes = read(fd, buf, buf_size);
-	if (bytes == 0 || bytes == -1)
-		return (NULL);
-	return (buf);
+	return (work(fd));
 }

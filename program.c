@@ -18,6 +18,7 @@ int	main(void)
 {
 	char	*data;
 	int		fd;
+	int		i;
 
 	fd = open("Makefile", O_RDONLY);
 	if (fd == -1)
@@ -25,7 +26,8 @@ int	main(void)
 		printf("could not open file\n");
 		return (1);
 	}
-	while (1)
+	i = 3;
+	while (i--)
 	{
 		data = get_next_line(fd);
 		if (!data)
@@ -35,7 +37,7 @@ int	main(void)
 		}
 		else
 		{
-			printf("%s\n", data);
+			printf("%s", data);
 		}
 	}
 	return (0);
