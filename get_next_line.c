@@ -12,9 +12,9 @@
 
 #include "get_next_line.h"
 
-static char	*get_line(char *buf, size_t bytes)
+static char	*get_line(char *buf, ssize_t bytes)
 {
-	size_t	i;
+	ssize_t	i;
 
 	i = 0;
 	while (i < bytes)
@@ -32,9 +32,9 @@ static char	*get_line(char *buf, size_t bytes)
 static char	*work(int fd)
 {
 	static char	buf[BUFFER_SIZE];
-	static int	bytes;
+	static ssize_t bytes;
 
-	bytes += read(fd, buf, BUFFER_SIZE);
+	bytes = read(fd, buf, BUFFER_SIZE);
 	if (!bytes)
 		return (NULL);
 	return (get_line(buf, bytes));
