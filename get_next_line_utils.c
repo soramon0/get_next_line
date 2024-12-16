@@ -29,3 +29,15 @@ char	*ft_strdup(const char *src, size_t n)
 	dup[i] = '\0';
 	return (dup);
 }
+
+ssize_t	ft_strchr(const char *s, char c)
+{
+	ssize_t	i;
+
+	i = 0;
+	while (s[i] && s[i] != c)
+		i++;
+	if (s[i] == c)
+		return (i);
+	return (-1);
+}

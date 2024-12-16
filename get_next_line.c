@@ -16,23 +16,22 @@ static char	*get_line(char *buf, ssize_t bytes)
 {
 	ssize_t	i;
 
-	i = 0;
-	while (i < bytes)
+	i = ft_strchr(buf, '\n');
+	if (i == -1)
 	{
-		if (buf[i] == '\n')
-		{
-			i++;
-			break ;
-		}
-		i++;
+		// read more
+		return (NULL);
+	}
+	if (bytes - i != 0) {
+
 	}
 	return (ft_strdup(buf, i));
 }
 
 static char	*work(int fd)
 {
-	static char	buf[BUFFER_SIZE];
-	static ssize_t bytes;
+	static char		buf[BUFFER_SIZE];
+	ssize_t	bytes;
 
 	bytes = read(fd, buf, BUFFER_SIZE);
 	if (!bytes)

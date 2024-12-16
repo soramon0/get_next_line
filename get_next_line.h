@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_GET_NEXT_LINE_H
-# define FT_GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 69
@@ -22,5 +22,6 @@
 
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *src, size_t n);
+ssize_t	ft_strchr(const char *s, char c);
 
 #endif
