@@ -72,7 +72,7 @@ static char	*work(int fd, char **tupile)
 	while (nl_pos == -1)
 	{
 		buf_size = ft_strlen(tupile[0]);
-		if (expand_buf(tupile, buf_size) == 0)
+		if (expand_buf(tupile, buf_size) == -1)
 			return (cleanup(tupile), NULL);
 		bytes = read(fd, &tupile[0][buf_size], BUFFER_SIZE - buf_size);
 		if (bytes == 0)
