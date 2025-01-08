@@ -18,7 +18,7 @@ static void	cleanup(char **tupile)
 	free(tupile[1]);
 }
 
-char	*get_line(char **tupile, ssize_t nl_pos)
+static char	*get_line(char **tupile, ssize_t nl_pos)
 {
 	char	*tmp;
 	size_t	i;
@@ -36,7 +36,7 @@ char	*get_line(char **tupile, ssize_t nl_pos)
 	return (tmp);
 }
 
-char	*expand_buf(char **tupile, size_t buf_size)
+static int	expand_buf(char **tupile, size_t buf_size)
 {
 	char	*tmp;
 	size_t	i;
@@ -44,7 +44,7 @@ char	*expand_buf(char **tupile, size_t buf_size)
 	i = 0;
 	tmp = (char *)malloc(buf_size + BUFFER_SIZE + 1);
 	if (!tmp)
-		return (NULL);
+		return (-1);
 	while (tupile[0][i])
 	{
 		tmp[i] = tupile[0][i];
@@ -53,7 +53,7 @@ char	*expand_buf(char **tupile, size_t buf_size)
 	tmp[i] = '\0';
 	free(tupile[0]);
 	tupile[0] = tmp;
-	return (tupile[0]);
+	return (0);
 }
 
 static char	*work(int fd, char **tupile)
@@ -72,7 +72,7 @@ static char	*work(int fd, char **tupile)
 	while (nl_pos == -1)
 	{
 		buf_size = ft_strlen(tupile[0]);
-		if (!expand_buf(tupile, buf_size))
+		if (expand_buf(tupile, buf_size) == 0)
 			return (cleanup(tupile), NULL);
 		bytes = read(fd, &tupile[0][buf_size], BUFFER_SIZE - buf_size);
 		if (bytes == 0)
