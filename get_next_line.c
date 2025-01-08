@@ -12,36 +12,87 @@
 
 #include "get_next_line.h"
 
-static char	*get_line(char *buf, ssize_t bytes)
+static void	cleanup(char **tupile)
 {
-	ssize_t	i;
-
-	i = ft_strchr(buf, '\n');
-	if (i == -1)
-	{
-		// read more
-		return (NULL);
-	}
-	if (bytes - i != 0) {
-
-	}
-	return (ft_strdup(buf, i));
+	free(tupile[0]);
+	free(tupile[1]);
 }
 
-static char	*work(int fd)
+char	*get_line(char **tupile, ssize_t nl_pos)
 {
-	static char		buf[BUFFER_SIZE];
-	ssize_t	bytes;
+	char	*tmp;
+	size_t	i;
 
-	bytes = read(fd, buf, BUFFER_SIZE);
-	if (!bytes)
+	i = 0;
+	tmp = ft_strndup(tupile[0], ++nl_pos);
+	if (!tmp)
+		return (cleanup(tupile), NULL);
+	free(tupile[1]);
+	tupile[1] = tmp;
+	while (tupile[0][nl_pos])
+		tupile[0][i++] = tupile[0][nl_pos++];
+	while (tupile[0][i])
+		tupile[0][i++] = '\0';
+	return (tmp);
+}
+
+char	*expand_buf(char **tupile, size_t buf_size)
+{
+	char	*tmp;
+	size_t	i;
+
+	i = 0;
+	tmp = (char *)malloc(buf_size + BUFFER_SIZE + 1);
+	if (!tmp)
 		return (NULL);
-	return (get_line(buf, bytes));
+	while (tupile[0][i])
+	{
+		tmp[i] = tupile[0][i];
+		i++;
+	}
+	tmp[i] = '\0';
+	free(tupile[0]);
+	tupile[0] = tmp;
+	return (tupile[0]);
+}
+
+static char	*work(int fd, char **tupile)
+{
+	size_t	buf_size;
+	ssize_t	bytes;
+	ssize_t	nl_pos;
+
+	if (!tupile[0][0])
+	{
+		bytes = read(fd, tupile[0], BUFFER_SIZE);
+		if (!bytes)
+			return (cleanup(tupile), NULL);
+	}
+	nl_pos = ft_strchr(tupile[0], '\n');
+	while (nl_pos == -1)
+	{
+		buf_size = ft_strlen(tupile[0]);
+		if (!expand_buf(tupile, buf_size))
+			return (cleanup(tupile), NULL);
+		bytes = read(fd, &tupile[0][buf_size], BUFFER_SIZE - buf_size);
+		if (bytes == 0)
+			return (get_line(tupile, buf_size - 1));
+		if (!bytes)
+			return (cleanup(tupile), NULL);
+		nl_pos = ft_strchr(tupile[0], '\n');
+	}
+	return (get_line(tupile, nl_pos));
 }
 
 char	*get_next_line(int fd)
 {
+	static char	*tupile[2];
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	return (work(fd));
+	if (!tupile[0])
+		tupile[0] = (char *)malloc(BUFFER_SIZE + 1);
+	if (!tupile[0])
+		return (NULL);
+	return (work(fd, tupile));
 }

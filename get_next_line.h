@@ -21,7 +21,8 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*ft_strdup(const char *src, size_t n);
+char	*ft_strndup(const char *src, size_t n);
 ssize_t	ft_strchr(const char *s, char c);
+size_t	ft_strlen(const char *s);
 
 #endif

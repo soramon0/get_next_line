@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *src, size_t n)
+char	*ft_strndup(const char *src, size_t n)
 {
 	size_t	i;
 	char	*dup;
@@ -40,4 +40,14 @@ ssize_t	ft_strchr(const char *s, char c)
 	if (s[i] == c)
 		return (i);
 	return (-1);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
