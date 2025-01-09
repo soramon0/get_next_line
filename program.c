@@ -14,10 +14,25 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-int	main(int argc, char *argv[])
+void	process(int fd)
 {
 	char	*data;
-	int		fd;
+
+	data = get_next_line(fd);
+	while (1)
+	{
+		if (!data)
+			break ;
+		else
+			printf("%s", data);
+		data = get_next_line(fd);
+	}
+	printf("EOF\n");
+}
+
+int	main(int argc, char *argv[])
+{
+	int	fd;
 
 	if (argc != 2)
 	{
@@ -30,20 +45,7 @@ int	main(int argc, char *argv[])
 		printf("could not open file\n");
 		return (1);
 	}
-	printf("Reading %s file line by line in chunks of %d bytes...\n", argv[1],
-		BUFFER_SIZE);
-	data = get_next_line(fd);
-	while (1)
-	{
-		if (!data)
-		{
-			printf("%s", data);
-			printf("\n");
-			break ;
-		}
-		else
-			printf("%s", data);
-		data = get_next_line(fd);
-	}
+	printf("Reading %s file in chunks of %d bytes...\n", argv[1], BUFFER_SIZE);
+	process(fd);
 	return (0);
 }
