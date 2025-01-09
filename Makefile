@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 OUT = program
 SRC = get_next_line.c get_next_line_utils.c program.c
 BUFF_SIZE = 69
