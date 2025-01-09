@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 static void	*cleanup(char **buf)
 {
@@ -58,19 +59,11 @@ static char	*expand_buf(char **buf, size_t buf_size)
 	return (new_buf);
 }
 
-static char	*work(int fd, char **buf)
+static char	*process_buf(int fd, char **buf, ssize_t bytes)
 {
 	size_t	buf_size;
-	ssize_t	bytes;
 	ssize_t	nl_pos;
 
-	if (!(*buf)[0])
-	{
-		bytes = read(fd, *buf, BUFFER_SIZE);
-		if (!bytes)
-			return (cleanup(buf));
-		(*buf)[bytes] = '\0';
-	}
 	nl_pos = ft_strchr(*buf, '\n');
 	while (nl_pos == -1)
 	{
@@ -91,6 +84,7 @@ static char	*work(int fd, char **buf)
 char	*get_next_line(int fd)
 {
 	static char	*buf;
+	int			bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -101,5 +95,12 @@ char	*get_next_line(int fd)
 			return (NULL);
 		buf[0] = '\0';
 	}
-	return (work(fd, &buf));
+	if (!buf[0])
+	{
+		bytes = read(fd, buf, BUFFER_SIZE);
+		if (!bytes)
+			return (cleanup(&buf));
+		buf[bytes] = '\0';
+	}
+	return (process_buf(fd, &buf, bytes));
 }
