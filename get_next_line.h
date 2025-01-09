@@ -22,7 +22,6 @@
 #  define BUFFER_SIZE 0
 # endif
 
-# include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
 

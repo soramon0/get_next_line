@@ -19,7 +19,8 @@ int	main(int argc, char *argv[])
 	char	*data;
 	int		fd;
 
-	if (argc != 2){
+	if (argc != 2)
+	{
 		printf("not enough arguments\n");
 		return (1);
 	}
@@ -29,7 +30,8 @@ int	main(int argc, char *argv[])
 		printf("could not open file\n");
 		return (1);
 	}
-	printf("Reading %s file line by line in chunks of %d bytes...\n", argv[1], BUFFER_SIZE);
+	printf("Reading %s file line by line in chunks of %d bytes...\n", argv[1],
+		BUFFER_SIZE);
 	data = get_next_line(fd);
 	while (1)
 	{
