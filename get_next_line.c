@@ -69,6 +69,7 @@ static char	*work(int fd, char **buf)
 		bytes = read(fd, *buf, BUFFER_SIZE);
 		if (!bytes)
 			return (cleanup(buf));
+		(*buf)[bytes] = '\0';
 	}
 	nl_pos = ft_strchr(*buf, '\n');
 	while (nl_pos == -1)
@@ -77,6 +78,7 @@ static char	*work(int fd, char **buf)
 		if (!expand_buf(buf, buf_size))
 			return (cleanup(buf));
 		bytes = read(fd, &(*buf)[buf_size], BUFFER_SIZE - buf_size);
+		(*buf)[buf_size + bytes] = '\0';
 		if (bytes == 0)
 			return (get_line(buf, buf_size));
 		if (!bytes)
