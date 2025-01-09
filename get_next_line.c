@@ -70,7 +70,7 @@ static char	*process_buf(int fd, char **buf, ssize_t bytes)
 		buf_size = ft_strlen(*buf);
 		if (!expand_buf(buf, buf_size))
 			return (cleanup(buf));
-		bytes = read(fd, &(*buf)[buf_size], BUFFER_SIZE - buf_size);
+		bytes = read(fd, *buf + buf_size, BUFFER_SIZE - buf_size);
 		(*buf)[buf_size + bytes] = '\0';
 		if (bytes == 0)
 			return (get_line(buf, buf_size));
