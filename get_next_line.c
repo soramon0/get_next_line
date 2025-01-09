@@ -12,23 +12,25 @@
 
 #include "get_next_line.h"
 
-static void *cleanup(char *buf)
+static void	*cleanup(char **buf)
 {
-	if (buf != NULL)
-		free(buf);
-	buf = NULL;
+	if (*buf != NULL)
+		free(*buf);
+	*buf = NULL;
 	return (NULL);
 }
 
-static char	*get_line(char *buf, size_t end)
+static char	*get_line(char **p_buf, size_t end)
 {
 	char	*tmp;
+	char	*buf;
 	size_t	i;
 
+	buf = *p_buf;
 	i = 0;
 	tmp = ft_strndup(buf, end);
 	if (!tmp)
-		return (cleanup(buf));
+		return (cleanup(p_buf));
 	while (buf[end])
 		buf[i++] = buf[end++];
 	while (buf[i])
@@ -36,7 +38,7 @@ static char	*get_line(char *buf, size_t end)
 	return (tmp);
 }
 
-static char *expand_buf(char *buf, size_t buf_size)
+static char	*expand_buf(char **buf, size_t buf_size)
 {
 	char	*new_buf;
 	size_t	i;
@@ -45,41 +47,41 @@ static char *expand_buf(char *buf, size_t buf_size)
 	new_buf = (char *)malloc(buf_size + BUFFER_SIZE + 1);
 	if (!new_buf)
 		return (cleanup(buf));
-	while (buf[i])
+	while ((*buf)[i])
 	{
-		new_buf[i] = buf[i];
+		new_buf[i] = (*buf)[i];
 		i++;
 	}
 	new_buf[i] = '\0';
-	free(buf);
+	free(*buf);
+	*buf = new_buf;
 	return (new_buf);
 }
 
-static char	*work(int fd, char *buf)
+static char	*work(int fd, char **buf)
 {
 	size_t	buf_size;
 	ssize_t	bytes;
 	ssize_t	nl_pos;
 
-	if (!buf[0])
+	if (!(*buf)[0])
 	{
-		bytes = read(fd, buf, BUFFER_SIZE);
+		bytes = read(fd, *buf, BUFFER_SIZE);
 		if (!bytes)
 			return (cleanup(buf));
 	}
-	nl_pos = ft_strchr(buf, '\n');
+	nl_pos = ft_strchr(*buf, '\n');
 	while (nl_pos == -1)
 	{
-		buf_size = ft_strlen(buf);
-		buf = expand_buf(buf, buf_size);
-		if (!buf)
+		buf_size = ft_strlen(*buf);
+		if (!expand_buf(buf, buf_size))
 			return (cleanup(buf));
-		bytes = read(fd, &buf[buf_size], BUFFER_SIZE - buf_size);
+		bytes = read(fd, &(*buf)[buf_size], BUFFER_SIZE - buf_size);
 		if (bytes == 0)
 			return (get_line(buf, buf_size));
 		if (!bytes)
 			return (cleanup(buf));
-		nl_pos = ft_strchr(buf, '\n');
+		nl_pos = ft_strchr(*buf, '\n');
 	}
 	return (get_line(buf, nl_pos + 1));
 }
@@ -97,5 +99,5 @@ char	*get_next_line(int fd)
 			return (NULL);
 		buf[0] = '\0';
 	}
-	return (work(fd, buf));
+	return (work(fd, &buf));
 }
