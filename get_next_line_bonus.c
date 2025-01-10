@@ -84,26 +84,26 @@ static char	*process_buf(int fd, char **buf, ssize_t bytes)
 
 char	*get_next_line(int fd)
 {
-	static char		*buf;
+	static char		*buf[FD_BUFFER_SIZE];
 	int				bytes;
 	unsigned long	read_buf_size;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_BUFFER_SIZE)
 		return (NULL);
 	read_buf_size = (unsigned long)BUFFER_SIZE;
-	if (!buf)
+	if (!buf[fd])
 	{
-		buf = (char *)malloc(read_buf_size + 1);
-		if (!buf)
+		buf[fd] = (char *)malloc(read_buf_size + 1);
+		if (!buf[fd])
 			return (NULL);
-		buf[0] = '\0';
+		buf[fd][0] = '\0';
 	}
-	if (!buf[0])
+	if (!buf[fd][0])
 	{
-		bytes = read(fd, buf, BUFFER_SIZE);
+		bytes = read(fd, buf[fd], BUFFER_SIZE);
 		if (bytes == 0 || bytes == -1)
-			return (cleanup(&buf));
-		buf[bytes] = '\0';
+			return (cleanup(&buf[fd]));
+		buf[fd][bytes] = '\0';
 	}
-	return (process_buf(fd, &buf, bytes));
+	return (process_buf(fd, &buf[fd], bytes));
 }
