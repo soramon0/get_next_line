@@ -20,7 +20,7 @@ void	process(int fd, int fd2, int fd3)
 
 	data[0] = get_next_line(fd);
 	printf("[%d]: %s", fd, data[0]);
-	data[1]= get_next_line(fd2);
+	data[1] = get_next_line(fd2);
 	printf("[%d]: %s", fd2, data[1]);
 	data[2] = get_next_line(fd3);
 	printf("[%d]: %s", fd3, data[2]);
@@ -62,7 +62,6 @@ int	main(void)
 		printf("could not open file\n");
 		return (1);
 	}
-	printf("Reading %s file in chunks of %d bytes...\n", "Makefile", BUFFER_SIZE);
 	process(makefile, get_line, get_line_bonus);
 	return (0);
 }
