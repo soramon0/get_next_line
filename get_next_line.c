@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static void	*cleanup(char **buf)
 {
@@ -70,11 +69,11 @@ static char	*process_buf(int fd, char **buf, ssize_t bytes)
 		buf_size = ft_strlen(*buf);
 		if (!expand_buf(buf, buf_size))
 			return (cleanup(buf));
-		bytes = read(fd, *buf + buf_size, BUFFER_SIZE - buf_size);
+		bytes = read(fd, *buf + buf_size, BUFFER_SIZE);
 		(*buf)[buf_size + bytes] = '\0';
 		if (bytes == 0)
 			return (get_line(buf, buf_size));
-		if (!bytes)
+		if (bytes == -1)
 			return (cleanup(buf));
 		nl_pos = ft_strchr(*buf, '\n');
 	}
@@ -98,7 +97,7 @@ char	*get_next_line(int fd)
 	if (!buf[0])
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (!bytes)
+		if (bytes == 0 || bytes == -1)
 			return (cleanup(&buf));
 		buf[bytes] = '\0';
 	}
