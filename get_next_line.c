@@ -42,9 +42,11 @@ static char	*expand_buf(char **buf, size_t buf_size)
 {
 	char	*new_buf;
 	size_t	i;
+	unsigned long read_buf_size;
 
 	i = 0;
-	new_buf = (char *)malloc(buf_size + BUFFER_SIZE + 1);
+	read_buf_size = (unsigned long)BUFFER_SIZE;
+	new_buf = (char *)malloc(buf_size + read_buf_size + 1);
 	if (!new_buf)
 		return (cleanup(buf));
 	while ((*buf)[i])
@@ -84,12 +86,14 @@ char	*get_next_line(int fd)
 {
 	static char	*buf;
 	int			bytes;
+	unsigned long read_buf_size;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+	read_buf_size = (unsigned long)BUFFER_SIZE;
 	if (!buf)
 	{
-		buf = (char *)malloc(BUFFER_SIZE + 1);
+		buf = (char *)malloc(read_buf_size + 1);
 		if (!buf)
 			return (NULL);
 		buf[0] = '\0';
