@@ -25,6 +25,7 @@ void	process(int fd)
 			break ;
 		else
 			printf("%s", data);
+		free(data);
 		data = get_next_line(fd);
 	}
 	printf("EOF\n");
