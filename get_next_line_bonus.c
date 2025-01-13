@@ -91,6 +91,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD_BUFFER_SIZE)
 		return (NULL);
 	read_buf_size = (unsigned long)BUFFER_SIZE;
+	bytes = 0;
 	if (!buf[fd])
 	{
 		buf[fd] = (char *)malloc(read_buf_size + 1);
